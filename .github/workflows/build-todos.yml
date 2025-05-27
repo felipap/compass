@@ -9,7 +9,7 @@ on:
     paths:
       - 'todos/**'
     tags:
-      - 'todos-v*.*.*' # Trigger on version tags like v1.0.0
+      - 'todos-v*.*.*' # Only trigger on version tags like todos-v1.0.0
 
 jobs:
   build:
@@ -32,6 +32,24 @@ jobs:
         working-directory: ./todos
         run: pnpm install --frozen-lockfile
 
+      - name: Rebuild native dependencies
+        working-directory: ./todos
+        run: pnpm rebuild
+
+      - name: Exit early if not a release
+        if: ${{ !startsWith(github.ref, 'refs/tags/todos-v') }}
+        run: |
+          echo "Not a release tag, exiting early"
+          exit 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Xcode Command Line Tools
+        run: xcode-select --install || true
+
       - name: Build Electron app
         working-directory: ./todos
         run: pnpm run make
@@ -52,7 +70,6 @@ jobs:
 
       # Only create release on todos-specific version tags
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/todos-v')
         uses: softprops/action-gh-release@v1
         with:
           name: 'Todos ${{ github.ref_name }}'
