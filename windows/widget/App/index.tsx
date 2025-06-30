@@ -20,7 +20,7 @@ export default function App() {
         )}
       >
         <h2 className="text-[17px] pt-1 font-semibold w-full select-none">
-          Todos
+          Compass
         </h2>
         <div className="[app-region:no-drag]">
           <PinButton />

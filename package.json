@@ -1,6 +1,6 @@
 {
-  "name": "pi-todos",
-  "productName": "Todos",
+  "name": "pi-compass",
+  "productName": "Compass",
   "version": "0.1.0",
   "description": "Intelligent to-do app",
   "main": ".vite/build/main.js",

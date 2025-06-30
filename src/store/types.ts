@@ -4,6 +4,7 @@ export interface Project {
   description: string | null
   createdAt: string
   updatedAt: string
+  archivedAt: string | null
 }
 
 export const DEFAULT_STATE: State = {

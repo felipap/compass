@@ -1,6 +1,6 @@
 import { Link, useMatches, useRouter } from '@tanstack/react-router'
 import { ListIcon } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { BsFillTrash2Fill } from 'react-icons/bs'
 import { FaBook, FaStar } from 'react-icons/fa6'
 import { RiArchive2Fill } from 'react-icons/ri'
@@ -11,6 +11,11 @@ import { CircularProgress } from '../../../shared/ui/CircularProgress'
 export function Sidebar() {
   const routerInstance = useRouter()
   const { projects } = useProjects()
+
+  const activeProjects = useMemo(() => {
+    return projects.filter((project) => !project.archivedAt)
+  }, [projects])
+
   const { tasks } = useTasks()
 
   useEffect(() => {
@@ -35,8 +40,8 @@ export function Sidebar() {
           routerInstance.navigate({ to: '/trash' })
         }
         // Projects: 6 and above
-        else if (num >= 6 && num - 6 < projects.length) {
-          const project = projects[num - 6]
+        else if (num >= 6 && num - 6 < activeProjects.length) {
+          const project = activeProjects[num - 6]
           routerInstance.navigate({
             to: '/project/$projectId',
             params: { projectId: project.id },
@@ -49,7 +54,7 @@ export function Sidebar() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [routerInstance, projects])
+  }, [routerInstance, activeProjects])
 
   return (
     <div className="pt-[60px] px-3 w-full h-full bg-[#f6f7f8] border-r border-[#EEE] [app-region:drag] ">
@@ -86,12 +91,12 @@ export function Sidebar() {
           </SidebarButton>
         </section>
         {/* Projects */}
-        {projects.length > 0 && (
+        {activeProjects.length > 0 && (
           <section className="flex flex-col gap-1">
             <div className="px-2 text-sm font-medium text-gray-500">
               Projects
             </div>
-            {projects.map((project) => (
+            {activeProjects.map((project) => (
               <SidebarButton
                 key={project.id}
                 href={`/project/${project.id}`}
