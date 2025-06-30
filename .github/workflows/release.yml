@@ -1,0 +1,78 @@
+name: Build and Release
+permissions:
+  contents: write
+
+on:
+  push:
+    tags:
+      # Do we need this?
+      - '*.*.*' # Only trigger on version tags like 1.0.0
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 5
+    env:
+      CSC_IDENTITY: ${{ secrets.MACOS_CERTIFICATE_ID }}
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.11' # Match the exact version from package.json
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Import code signing certificate
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.CERTIFICATE_P12 }}
+          p12-password: ${{ secrets.CERTIFICATE_PASSWORD }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Xcode Command Line Tools
+        run: xcode-select --install || true
+
+      - name: Rebuild native dependencies
+        run: pnpm rebuild
+
+      - name: Build Electron app
+        run: IS_RELEASE=true pnpm run make
+
+      # # For debugging
+      # - name: List Electron output
+      #   run: ls -R ./compass/out/make
+
+      # - name: Upload ZIP artifact (fallback)
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Nudge-macOS-arm64-zip
+      #     path: compass/out/make/zip/darwin/arm64/*.zip
+      #     if-no-files-found: ignore
+
+      - name: Create Release
+        # Only create release on compass-specific version tags
+        uses: softprops/action-gh-release@v1
+        with:
+          name: 'Compass ${{ github.ref_name }}'
+          files: |
+            out/make/**/*.dmg
+            out/make/**/*.zip
+          draft: false
+          # prerelease: false
+          generate_release_notes: true
+          # body_path: CHANGELOG.md
