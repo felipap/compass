@@ -1,7 +1,8 @@
-# todos
+# Compass
 
-Productivity util for macOS that watches your screen and tells you when you're
-procrastinating.
+An AI-native to-do app.
+
+Inspo: "Can you make an MCP app that tells you how to achieve your goals?"
 
 ## To do
 
