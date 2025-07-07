@@ -2,13 +2,9 @@
 
 An AI-native to-do app.
 
+## Why?
+
 Inspo: "Can you make an MCP app that tells you how to achieve your goals?"
-
-## To do
-
-- [ ] Reset goals every day.
-- [ ] Allow users to modify frequency
-- [ ] Come up with an icon
 
 ## Stack
 
