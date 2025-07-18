@@ -1,7 +1,7 @@
 {
   "name": "pi-compass",
   "productName": "Compass",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Intelligent to-do app",
   "main": ".vite/build/main.js",
   "scripts": {
