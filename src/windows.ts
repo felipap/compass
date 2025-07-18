@@ -32,7 +32,19 @@ export function createMainWindow() {
   })
 
   app.setName('Compass')
-  app.dock.setIcon(getImagePath('icon-production.png'))
+
+  // In development, the default icon is Electron's. So we override it.
+  if (!app.isPackaged) {
+    app.dock.setIcon(getImagePath('icon-development.png'))
+  }
+
+  win.on('show', () => {
+    onChangeAnyWindowVisibility()
+  })
+
+  win.on('hide', () => {
+    onChangeAnyWindowVisibility()
+  })
 
   // Hide from macOS docker
   // app.dock.hide()
@@ -187,4 +199,16 @@ export function createPreferencesWindow() {
   prefWindow = win
 
   return win
+}
+
+function onChangeAnyWindowVisibility() {
+  const isAnyVisible = mainWindow?.isVisible() || prefWindow?.isVisible()
+
+  if (process.platform === 'darwin') {
+    if (isAnyVisible) {
+      app.dock.show()
+    } else {
+      app.dock.hide()
+    }
+  }
 }

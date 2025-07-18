@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Task } from '../../../../src/store/types'
 import { useTodoState } from '../../../shared/lib/useTodoState'
 import { DraggableList } from '../../../shared/ui/DraggableList'
@@ -24,8 +24,14 @@ export const TaskList = withBoundary(
     restoreOnDelete = false,
     visibleItemDate = false,
   }: Props) => {
-    const { toggleTodoCompletion, deleteTodo, reorderTodos, undo, editTodo } =
-      useTodoState()
+    const {
+      toggleTodoCompletion,
+      deleteTodo,
+      reorderTodos,
+      undo,
+      editTodo,
+      cancelTodo,
+    } = useTodoState()
 
     // Sort tasks by anytimeRank
     const sortedTasks = [...tasks].sort((a, b) => {
@@ -43,6 +49,12 @@ export const TaskList = withBoundary(
 
       for (const id of ids) {
         await toggleTodoCompletion(id, targetCompleted)
+      }
+    }
+    const cancelTasks = async (ids: string[]) => {
+      console.log('cancelling', ids)
+      for (const id of ids) {
+        await cancelTodo(id)
       }
     }
 
@@ -115,11 +127,12 @@ export const TaskList = withBoundary(
               >
                 <TaskItem
                   task={task}
-                  onToggle={(id) => toggleTasks([id])}
-                  onFocus={() => onFocus(task.id)}
+                  toggle={(id) => toggleTasks([id])}
                   dragHandleProps={dragHandleProps}
                   isFocused={selection.includes(task.id)}
                   isOpen={task.id === openTodoId}
+                  onFocus={() => onFocus(task.id)}
+                  cancel={() => cancelTasks([task.id])}
                   onOpen={() => onOpenTodo(task.id)}
                   close={closeTodo}
                   showStarIfToday={showStarIfToday}

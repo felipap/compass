@@ -80,9 +80,27 @@ export function useTodoState() {
         return {
           ...task,
           loggedAt: task.loggedAt && !value ? null : task.loggedAt,
+          cancelledAt: null,
           completedAt: value
             ? task.completedAt || new Date().toISOString()
             : null,
+        }
+      }
+      return task
+    })
+
+    await saveState({
+      tasks: updatedTodos,
+    })
+  }
+
+  async function cancelTodo(id: string) {
+    const updatedTodos = tasksRef.current.map((task) => {
+      if (task.id === id) {
+        return {
+          ...task,
+          // loggedAt: task.loggedAt && !value ? null : task.loggedAt,
+          cancelledAt: new Date().toISOString(),
         }
       }
       return task
@@ -199,6 +217,7 @@ export function useTodoState() {
     toggleTodoCompletion,
     deleteTodo,
     tasksRef,
+    cancelTodo,
     editTodo,
     logAllCompleted,
     reorderTodos,

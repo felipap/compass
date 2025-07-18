@@ -14,7 +14,7 @@ const IS_MAKE = !!process.env.IS_MAKE
 
 const packagerConfig: ForgeConfig['packagerConfig'] = {
   name: 'Compass' + (IS_DEV ? '(dev)' : ''),
-  appBundleId: 'engineering.pi.nudge' + (IS_DEV ? '-dev' : ''),
+  appBundleId: 'engineering.pi.compass' + (IS_DEV ? '-dev' : ''),
   asar: true,
   icon:
     IS_RELEASE || IS_MAKE

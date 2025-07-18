@@ -1,6 +1,6 @@
 import { DraggableAttributes } from '@dnd-kit/core'
 import dayjs from 'dayjs'
-import { Check, Circle, CircleStop, Dot, Flag } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { FaStar } from 'react-icons/fa'
 import { FaFlag, FaMoon } from 'react-icons/fa6'
@@ -11,11 +11,12 @@ import { OpenItem } from './OpenItem'
 
 interface Props {
   task: Task
-  onToggle: (id: string) => void
   dragHandleProps: DraggableAttributes & Record<string, any>
   isOpen: boolean
   onOpen: () => void
   onFocus: () => void
+  toggle: (id: string) => void
+  cancel: (id: string) => void
   close: () => void
   showStarIfToday?: boolean
   visibleDate?: boolean
@@ -24,12 +25,13 @@ interface Props {
 
 export const TaskItem = ({
   task,
-  onToggle,
+  toggle,
   dragHandleProps,
   isOpen,
   isFocused,
   showStarIfToday,
   visibleDate = false,
+  cancel,
   onOpen,
   onFocus,
   close,
@@ -78,8 +80,15 @@ export const TaskItem = ({
     >
       <div className="flex items-center gap-2">
         <Checkbox
-          onClick={() => onToggle(task.id)}
+          onClick={(e) => {
+            if (e.altKey) {
+              cancel(task.id)
+            } else {
+              toggle(task.id)
+            }
+          }}
           checked={!!task.completedAt}
+          cancelled={!!task.cancelledAt}
         />
         {visibleDate && (task.completedAt || task.cancelledAt) && (
           <div className="text-sm font-medium whitespace-nowrap text-blue-500">
@@ -123,7 +132,8 @@ export const TaskItem = ({
           <div
             className={twMerge(
               'min-w-0 flex flex-row gap-2 items-center flex-1 cursor-pointer select-none text-[14px] px-1 py-0 transition-all text-ellipsis whitespace-nowrap overflow-hidden ',
-              task.completedAt && 'opacity-40'
+              task.completedAt && 'opacity-40',
+              task.cancelledAt && 'opacity-40 line-through'
             )}
           >
             {task.text || '\u00A0'}
@@ -142,20 +152,24 @@ export const TaskItem = ({
 function Checkbox({
   checked,
   onClick,
+  cancelled,
 }: {
   checked: boolean
-  onClick: () => void
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void
+  cancelled: boolean
 }) {
   return (
     <button
       className={twMerge(
         'shrink-0',
         'w-4 h-4 border rounded flex items-center justify-center',
-        checked ? 'bg-blue-500 border-blue-500' : 'border-gray-300'
+        (checked || cancelled) && 'bg-blue-500 border-blue-500',
+        cancelled && ' border-dashed'
       )}
       onClick={onClick}
     >
-      {checked && <Check className="w-3 h-3 text-white" />}
+      {checked && !cancelled && <Check className="w-3 h-3 text-white" />}
+      {cancelled && <X className="w-3 h-3 text-white" />}
     </button>
   )
 }
