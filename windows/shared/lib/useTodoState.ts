@@ -93,7 +93,7 @@ export function useTodoState() {
     })
   }
 
-  async function deleteTodo(id: string, restore: boolean = false) {
+  async function deleteTodo(id: string, restore = false) {
     const updatedTodos = tasksRef.current.map((task) => {
       if (task.id === id) {
         return {
@@ -151,7 +151,7 @@ export function useTodoState() {
     visibleTaskIds: string[],
     startIndex: number,
     endIndex: number,
-    isToday: boolean = false
+    isToday = false
   ) {
     // Get the tasks in their current visible order
     const visibleTasks = visibleTaskIds.map(

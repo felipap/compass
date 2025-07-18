@@ -23,11 +23,6 @@
     "noFallthroughCasesInSwitch": true,
     /* Paths */
     "baseUrl": "../..",
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    },
     "rootDir": "..",
     "types": [
       "../shared/window.d.ts"

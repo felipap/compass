@@ -1,4 +1,3 @@
-import { ApiKeyInput } from './ApiKeyInput'
 import { FrequencyInput } from './FrequencyInput'
 import { LaunchOnStartup } from './LaunchOnStartup'
 
@@ -50,9 +49,6 @@ export default function App() {
           <LaunchOnStartup />
         </section>
         <hr />
-        <section>
-          <ApiKeyInput />
-        </section>
       </main>
     </div>
   )

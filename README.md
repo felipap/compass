@@ -1,56 +1,28 @@
 # Compass
 
-An AI-native to-do app.
+A TO-DO app for you and your AI.
 
 ## Why?
 
 Inspo: "Can you make an MCP app that tells you how to achieve your goals?"
 
-## Stack
+## Download
 
-- Electron
-- Vite
-- Tailwind v4
-- OpenAI
+See the [releases page](https://github.com/felipap/compass/releases/latest) to find the latest DMGs.
 
-~~Screenshots are stored in `~/nudge-data/screenshots` and are captured every 5
-minutes by default.~~
+## Status
 
-## Development
+[![Downloads Badge](https://img.shields.io/github/downloads/felipap/compass/total.svg?color=green)](https://tooomm.github.io/github-release-stats/?username=felipap&repository=compass)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/felipap/compass/test.yml)](https://github.com/felipap/compass/actions)
 
-You know the drill:
+## License
 
-```bash
-pnpm install
-pnpm run dev
-```
+MIT
 
-### Project Structure
+<!-- Intelligent tools for productivity. -->
 
-- `src/background/` - Screenshot capture service
-- `src/preferences/` - App configuration
-- `window/` - UI components
+<!--
+## todos
 
-### To update the icon
-
-Use this:
-
-```
-# Create the iconset directory
-mkdir MyIcon.iconset
-
-# Generate all required icon sizes from your original PNG
-sips -z 16 16     original.png --out MyIcon.iconset/icon_16x16.png
-sips -z 32 32     original.png --out MyIcon.iconset/icon_16x16@2x.png
-sips -z 32 32     original.png --out MyIcon.iconset/icon_32x32.png
-sips -z 64 64     original.png --out MyIcon.iconset/icon_32x32@2x.png
-sips -z 128 128   original.png --out MyIcon.iconset/icon_128x128.png
-sips -z 256 256   original.png --out MyIcon.iconset/icon_128x128@2x.png
-sips -z 256 256   original.png --out MyIcon.iconset/icon_256x256.png
-sips -z 512 512   original.png --out MyIcon.iconset/icon_256x256@2x.png
-sips -z 512 512   original.png --out MyIcon.iconset/icon_512x512.png
-sips -z 1024 1024 original.png --out MyIcon.iconset/icon_512x512@2x.png
-
-# Convert the iconset to icns
-iconutil -c icns MyIcon.iconset
-```
+A simple to-do app with MCP support. 📝
+-->

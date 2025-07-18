@@ -32,7 +32,7 @@ export function createMainWindow() {
   })
 
   app.setName('Compass')
-  app.dock.setIcon(getImagePath('todos-icon.png'))
+  app.dock.setIcon(getImagePath('icon-production.png'))
 
   // Hide from macOS docker
   // app.dock.hide()

@@ -4,8 +4,8 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 // preload.ts
 
-import { contextBridge, ipcRenderer, shell } from 'electron'
-import type { State } from '../../src/types'
+import { contextBridge, ipcRenderer } from 'electron'
+import type { State } from '../../src/store/types'
 
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object

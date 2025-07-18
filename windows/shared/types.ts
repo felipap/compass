@@ -1,4 +1,4 @@
-import { State } from '../../src/types'
+import { State } from '../../src/store/types'
 
 declare global {
   interface Window {

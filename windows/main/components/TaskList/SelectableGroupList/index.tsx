@@ -1,5 +1,5 @@
-import { Task } from '@/src/store'
-import { type ReactNode, useEffect, useRef, useState } from 'react'
+import { type ReactNode, useEffect, useRef } from 'react'
+import { Task } from '../../../../../src/store'
 import { useSelection } from './use-selection'
 import { useFocusedShortcuts } from './use-shortcuts'
 

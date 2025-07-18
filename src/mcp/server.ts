@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
