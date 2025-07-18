@@ -97,7 +97,7 @@ export function createWidgetWindow() {
     width: 350,
     height: 300,
     resizable: true,
-    // show: false,
+    show: false,
     frame: false,
     x: primaryDisplay.workArea.x + primaryDisplay.workArea.width - 250 - 5,
     y: primaryDisplay.workArea.y + primaryDisplay.workArea.height - 200 - 5,

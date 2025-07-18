@@ -1,6 +1,9 @@
 # Compass
 
-A TO-DO app for you and your AI.
+A task app for you and your AI.
+
+> ![NOTE] Compass looks a lot like Things today because that's my favorite to-do
+> app, but the goal is to switch it out over time.
 
 ## Why?
 

@@ -27,11 +27,15 @@ export default function Screen() {
       handleAddTodo={handleAddTodo}
     >
       <TaskList tasks={todayTasks} />
-      <div className="flex items-center gap-2">
-        <FaMoon className="w-5 text-blue-300" />
-        <h1 className="text-[17px] font-semibold">Evening</h1>
-      </div>
-      <TaskList tasks={tonightTasks} />
+      {tonightTasks.length > 0 && (
+        <>
+          <div className="flex items-center gap-2">
+            <FaMoon className="w-5 text-blue-300" />
+            <h1 className="text-[17px] font-semibold">Evening</h1>
+          </div>
+          <TaskList tasks={tonightTasks} />
+        </>
+      )}
     </Layout>
   )
 }

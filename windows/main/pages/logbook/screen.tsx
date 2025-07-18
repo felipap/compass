@@ -9,7 +9,17 @@ export default function Screen() {
   const { tasks, logAllCompleted } = useTodoState()
 
   const pageTasks = useMemo(() => {
-    return tasks.filter((t) => !!t.loggedAt && !t.deletedAt)
+    return tasks
+      .filter((t) => !!t.loggedAt && !t.deletedAt)
+      .sort((a, b) => {
+        if (a.completedAt && b.completedAt) {
+          return (
+            new Date(a.cancelledAt || b.completedAt).getTime() -
+            new Date(a.cancelledAt || a.completedAt).getTime()
+          )
+        }
+        return 0
+      })
   }, [tasks])
 
   const hasPendingToFlush = useMemo(() => {

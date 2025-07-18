@@ -9,7 +9,8 @@ import {
 } from 'electron'
 import path from 'path'
 import { getState, store } from './store'
-import { mainWindow, widgetWindow } from './windows'
+import { onClickCheckForUpdates, updaterState } from './updater'
+import { mainWindow, prefWindow, widgetWindow } from './windows'
 
 const SHOW_THINGS_COPY = process.env.SHOW_THINGS_COPY || false
 
@@ -38,11 +39,11 @@ export function createTray() {
   function getTrayMenu() {
     const state = getState()
 
-    const template: MenuItemConstructorOptions[] = [
+    let template: MenuItemConstructorOptions[] = [
       {
-        label: 'Show Window',
+        label: 'Show Widget',
         click: () => {
-          widgetWindow.show()
+          widgetWindow!.show()
         },
       },
       {
@@ -53,15 +54,52 @@ export function createTray() {
           store.setState({ isWidgetPinned: !state.isWidgetPinned })
         },
       },
-      { type: 'separator' },
+    ]
+
+    template = template.concat([
       {
-        label: 'Quit',
+        label: 'Settings...',
+        accelerator: 'CmdOrCtrl+,',
         click: () => {
-          app.isQuitting = true
-          app.quit()
+          prefWindow!.show()
         },
       },
-    ]
+      { type: 'separator' },
+      {
+        label: `Version ${app.getVersion()}${app.isPackaged ? '' : ' (dev)'}`,
+        enabled: false,
+      },
+    ])
+
+    if (updaterState === 'downloaded') {
+      template.push({
+        label: 'Quit & install update',
+        accelerator: 'CmdOrCtrl+Q',
+        click: () => {
+          app.quit()
+        },
+      })
+    } else {
+      template.push({
+        enabled: updaterState !== 'downloading',
+        label:
+          updaterState === 'downloading'
+            ? 'Downloading update...'
+            : 'Check for updates...',
+        click: async () => {
+          await onClickCheckForUpdates()
+        },
+      })
+      template.push({
+        label: 'Quit',
+        sublabel: '⌘Q',
+        accelerator: 'CmdOrCtrl+Q',
+        click: () => {
+          // app.isQuitting = true // Do we need this?
+          app.quit()
+        },
+      })
+    }
 
     return template.filter(isTruthy)
   }
@@ -70,13 +108,13 @@ export function createTray() {
 
   tray.on('click', () => {
     if (SHOW_THINGS_COPY) {
-      if (mainWindow.isVisible()) {
-        mainWindow.hide()
+      if (mainWindow!.isVisible()) {
+        mainWindow!.hide()
       } else {
-        mainWindow.show()
+        mainWindow!.show()
       }
     } else {
-      widgetWindow.show()
+      widgetWindow!.show()
     }
   })
 

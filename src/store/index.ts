@@ -125,6 +125,7 @@ export const addProject = (title: string, description: string): Project => {
     description: description.trim(),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    archivedAt: null,
   }
 
   const currentProjects = store.getState().projects

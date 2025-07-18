@@ -3,10 +3,11 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { useProjects } from '../../../../shared/ipc'
 import { useTodoState } from '../../../../shared/lib/useTodoState'
+import { AutoExpandingTextarea } from '../../../../shared/ui/AutoExpandingTextarea'
+import { Button } from '../../../../shared/ui/Button'
 import { Layout, PageTitle } from '../../../components/Layout'
 import { ProjectProgressIndicator } from '../../../components/Sidebar'
 import { TaskList } from '../../../components/TaskList'
-import { AutoExpandingTextarea } from '../../../../shared/ui/AutoExpandingTextarea'
 
 export default function Screen() {
   // params
@@ -16,13 +17,24 @@ export default function Screen() {
   const { tasks, addTodo } = useTodoState()
   const { projects } = useProjects()
 
+  // state
+  const [loggedVisible, setLoggedVisible] = useState(false)
+
   const project = projects.find((p) => p.id === projectId)
 
-  const filteredTasks = useMemo(() => {
+  const nonDeletedTasks = useMemo(() => {
     return tasks.filter(
       (task) => task.projectId === projectId && !task.deletedAt
     )
   }, [tasks, projectId])
+
+  const loggedTasks = useMemo(() => {
+    return nonDeletedTasks.filter((task) => task.loggedAt)
+  }, [nonDeletedTasks])
+
+  const nonLoggedTasks = useMemo(() => {
+    return nonDeletedTasks.filter((task) => !task.loggedAt)
+  }, [nonDeletedTasks])
 
   if (!project) {
     return <div>Project not found</div>
@@ -48,7 +60,17 @@ export default function Screen() {
       icon={<ProjectProgressIndicator projectId={project.id} />}
       handleAddTodo={handleAddTodo}
     >
-      <TaskList tasks={filteredTasks} showStarIfToday />
+      <TaskList tasks={nonLoggedTasks} showStarIfToday />
+      <div className="mt-3">
+        <Button
+          onClick={() => setLoggedVisible(!loggedVisible)}
+          variant="plain"
+          className="text-sm"
+        >
+          {loggedVisible ? 'Hide logged' : 'Show logged'}
+        </Button>
+      </div>
+      {loggedVisible && <TaskList tasks={loggedTasks} showStarIfToday />}
     </Layout>
   )
 }
